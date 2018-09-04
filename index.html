@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <title>Gadon Ipsum</title>
+        <link href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>Gadon Ipsum Generator</h1>
+            <label>
+                Number of Paragraphs:
+                <input id="txt_paragraphs" type="number" min="1" value="1">
+            </label>
+            <a id="btn_generate" class="btn btn-success">Gadon!</a>
+            <div id="pnl_results"></div>
+
+        </div>
+        
+        <script src="//code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+        <script src="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script>
+            let phrases = [
+            	'kingina yan', 
+            	'bobo ka', 
+            	'mga bobo',
+            	'ipapatay ko lahat yan', 
+            	'uubusin ko ang lahi nila', 
+            	'Genocide sa Mindanao', 
+            	'ang mga taga letran ay hindi mga bobo!',
+             	'itong mga nagpoprotestang to mga bobo ito eh', 
+             	'ha it is very clear ano',
+                'may violation si sereno', 
+                'makukulong siya', 
+                'wala syang ano wala syang pinakitang papeles',
+                'Putangina',
+            ];
+
+            let punctuation_marks = ['.', '.', '.', '.', '.', '!', '?', ',']; // ang tuldok kay 5/8
+
+
+            let max_sentences = 7;
+            let min_sentences = 2;
+
+            let max_words = 15;
+            let min_words = 1;
+
+            function getRandomNumber(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
+            function getRandom(array) {
+                return array[Math.floor(Math.random()*array.length)];
+            }
+
+            jQuery(function($){
+                $("#btn_generate").click(function(){
+                    $("#pnl_results").empty();
+
+                    let paragraphs = [];
+                    let paragraph_count = $("#txt_paragraphs").val();
+                    for(let i = 0; i < paragraph_count; i++) {
+
+                        let sentences = [];
+                        let sentence_count = getRandomNumber(min_sentences, max_sentences);
+
+                        let previous_punctuation_mark = '';
+                        for(let j = 0; j < sentence_count; j++) {
+
+                            let words = [];
+                            let word_count = getRandomNumber(min_words, max_words);
+                            for(let k = 0; k < word_count; k++) {
+                                words.push(getRandom(phrases));
+                            }
+                            
+                            let is_last_sentence = (j == (sentence_count - 1));
+                            let punctuation_mark_selection = !is_last_sentence ? punctuation_marks : punctuation_marks.filter(a => a != ',');
+                            let punctuation_mark = getRandom(punctuation_mark_selection);
+                            let sentence = words.join(" ") + punctuation_mark;
+                            if(previous_punctuation_mark != ',') {
+                                sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+                                previous_punctuation_mark = punctuation_mark;
+                            }
+                            sentences.push(sentence);
+                        }
+
+                        paragraphs.push(sentences.join(" "));
+                    }
+                    let result = "Lorem ipsum putang inang mga bobo na to! " 
+                        + paragraphs.join("<br><br>");
+
+                    $("#pnl_results").html(result);
+                });
+            });
+        </script>
+    </body>
+</html>
